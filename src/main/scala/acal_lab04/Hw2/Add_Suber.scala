@@ -14,7 +14,26 @@ class Add_Suber extends Module{
   })
 
   //please implement your code below
+  //io.out := 0.U
+  //io.o_f := false.B
+  val fa_array = Array.fill(4)(Module(new FullAdder).io)
+  val S = Wire(Vec(4,UInt()))
+  fa_array(0).A := io.in_1(0)
+  fa_array(0).B := io.op ^ io.in_2(0)
+  fa_array(0).Cin := io.op
+  S(0) := fa_array(0).Sum
+  
+  for (i <- 1 until 4) {
+    fa_array(i).A := io.in_1(i)
+    fa_array(i).B := io.op ^ io.in_2(i)
+    fa_array(i).Cin := fa_array(i - 1).Cout
+    S(i) := fa_array(i).Sum
+  }
+  val f_flag = (fa_array(2).Cout ^ fa_array(3).Cout) =/= 0.U
 
-  io.out := 0.U
-  io.o_f := false.B
+  
+  //S(4):= Mux(f_flag, S(3),fa_array(3).Cout)
+  io.o_f := f_flag
+  io.out := S.asUInt
+  
 }

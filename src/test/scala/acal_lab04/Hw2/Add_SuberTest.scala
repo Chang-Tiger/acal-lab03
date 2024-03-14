@@ -23,6 +23,10 @@ class Add_SuberTest (as : Add_Suber) extends PeekPokeTester(as){
 		poke(as.io.op,op)
 		val answer = if(op==0){in1+in2}else{in1-in2}
 		val output = _signed(peek(as.io.out).toInt)
+		println(s"Input: $in1, $in2, $op")
+		println("Value of io.o_f: " + peek(as.io.o_f).toInt)
+		println(s"Answer: $answer")
+		println(s"Output: $output")
 
 		if(answer < -8 || answer > 7){
           if(!expect(as.io.o_f,1)){pass = pass + 1}
